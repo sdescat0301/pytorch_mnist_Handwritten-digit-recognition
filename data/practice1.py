@@ -1,5 +1,5 @@
 """使用CNN的卷积神经网络，数据库为MNIST"""
-# 使用双层CNN
+# 使用三层CNN
 
 # 第三方库
 import torch
@@ -8,7 +8,6 @@ import torch.utils.data as Data
 import torchvision
 import random
 import time
-
 # torch.manual_seed(1)    # reproducible
 
 '''超参数'''
@@ -65,13 +64,19 @@ class CNN(nn.Module):  # 定义网络本身
             nn.ReLU(),  # 激活
             nn.MaxPool2d(2),  # 最大池化，输出数据的形状为 (32, 7, 7)
         )
+        # 第三个卷积层
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(32, 64, 5, 1, 2),
+            nn.ReLU()
+        )
         # 全连接层
-        self.out = nn.Linear(32 * 7 * 7, 10)  # 输入数据形状为 (32 * 7 * 7)，输出10个类别（十种数字）
+        self.out = nn.Linear(64 * 7 * 7, 10)  # 输入数据形状为 (32 * 7 * 7)，输出10个类别（十种数字）
 
     # 定义前向传播
     def forward(self, x):
         x = self.conv1(x)  # 第一层卷积
         x = self.conv2(x)  # 第二层卷积
+        x = self.conv3(x)
         x = x.view(
             x.size(0),  # 保留batch数
             -1  # 把其他三个维度的数据展平

@@ -43,7 +43,6 @@ test_y = test_data.test_labels[:2000]   # 测试数据对应的标签，因为�
 '''定义CNN类'''
 
 
-# 定义CNN类
 class CNN(nn.Module):  
     def __init__(self):
         super(CNN, self).__init__()

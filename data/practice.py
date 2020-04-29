@@ -40,14 +40,16 @@ test_x = torch.unsqueeze(test_data.test_data, dim=1).type(torch.FloatTensor)[:20
 # 把测试数据规格从 (2000, 28, 28) 变成 (2000, 1, 28, 28), 取值在(0,1)范围内
 test_y = test_data.test_labels[:2000]   # 测试数据对应的标签，因为是是个数字所以为0~9
 
-'''定义CNN网络'''
+'''定义CNN类'''
 
 
-class CNN(nn.Module):  # 定义网络本身
+# 定义CNN类
+class CNN(nn.Module):  
     def __init__(self):
         super(CNN, self).__init__()
         # 第一个卷积层
-        self.conv1 = nn.Sequential(  # 输入数据的形状为一个通道，边长为28 (1, 28, 28)
+        # # 输入数据的形状为一个通道，边长为28 (1, 28, 28)
+        self.conv1 = nn.Sequential(
             nn.Conv2d(
                 in_channels=1,  # 输入的通道数为1
                 out_channels=16,  # 输出的通道数为16
@@ -60,7 +62,8 @@ class CNN(nn.Module):  # 定义网络本身
             nn.MaxPool2d(kernel_size=2),  # 最大池化（取区域内的最大值），输出数据的格式为16个通道，边长为14 (16, 14, 14)
         )
         # 第二个卷积层
-        self.conv2 = nn.Sequential(  # 输入数据的形状与上一层的输出一样，为 (16, 14, 14)
+        # 输入数据的形状与上一层的输出一样，为 (16, 14, 14)
+        self.conv2 = nn.Sequential(
             nn.Conv2d(16, 32, 5, 1, 2),  # 输出数据的形状为 (32, 14, 14)
             nn.ReLU(),  # 激活
             nn.MaxPool2d(2),  # 最大池化，输出数据的形状为 (32, 7, 7)
@@ -80,17 +83,18 @@ class CNN(nn.Module):  # 定义网络本身
         return output, x
 
 
-'''打印网络结构'''
-# 不是必需步骤，可以去掉
-cnn = CNN()
-print(cnn)
+'''创建一个CNN实例'''
+cnn = CNN() 
+print(cnn) # 打印出网络结构，不是必需步骤，可以去掉
 
 '''定义用于优化神经网络的函数'''
+# 优化函数，用于优化参数，使用Adam作为优化器
 optimizer = torch.optim.Adam(
     cnn.parameters(),  # 待优化参数的dict
     lr=LR  # 学习率
-)  # 优化函数，用于优化参数，使用Adam作为优化器
-loss_func = nn.CrossEntropyLoss()  # 损失函数，这里选用交叉熵损失函数（自带softmax）
+)
+# 损失函数，这里选用交叉熵损失函数（自带softmax）
+loss_func = nn.CrossEntropyLoss()  
 
 '''训练与测试'''
 # 训练网络

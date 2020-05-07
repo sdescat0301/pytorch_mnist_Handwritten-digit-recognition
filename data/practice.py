@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 import torch.utils.data as Data
 import torchvision
+import matplotlib.pyplot as plt
 import random
 import time
 
@@ -38,13 +39,19 @@ test_data = torchvision.datasets.MNIST(
 )
 test_x = torch.unsqueeze(test_data.test_data, dim=1).type(torch.FloatTensor)[:2000] / 255.
 # 把测试数据规格从 (2000, 28, 28) 变成 (2000, 1, 28, 28), 取值在(0,1)范围内
-test_y = test_data.test_labels[:2000]   # 测试数据对应的标签，因为是是个数字所以为0~9
+test_y = test_data.test_labels[:2000]  # 测试数据对应的标签，因为是是个数字所以为0~9
+
+# 展示一个图像
+random_num = random.randint(1, 60000)  # 生成随机数，确定展示图像的编号
+plt.imshow(train_data.train_data[random_num].numpy(), cmap='gray')
+plt.title('%i' % train_data.train_labels[random_num])
+plt.show()
 
 '''定义CNN类'''
 
 
 # 定义CNN类
-class CNN(nn.Module):  
+class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
         # 第一个卷积层
@@ -83,9 +90,9 @@ class CNN(nn.Module):
         return output, x
 
 
-'''创建一个CNN实例'''
-cnn = CNN() 
-print(cnn) # 打印出网络结构，不是必需步骤，可以去掉
+'创建一个CNN实例'
+cnn = CNN()
+print(cnn)  # 打印出网络结构，不是必需步骤，可以去掉
 
 '''定义用于优化神经网络的函数'''
 # 优化函数，用于优化参数，使用Adam作为优化器
@@ -94,7 +101,7 @@ optimizer = torch.optim.Adam(
     lr=LR  # 学习率
 )
 # 损失函数，这里选用交叉熵损失函数（自带softmax）
-loss_func = nn.CrossEntropyLoss()  
+loss_func = nn.CrossEntropyLoss()
 
 '''训练与测试'''
 # 训练网络
@@ -115,7 +122,7 @@ for epoch in range(EPOCH):
             accuracy = float((pred_y == test_y.data.numpy()).astype(int).sum()) / float(test_y.size(0))  # 计算精确度
             print('Epoch: ', epoch, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.3f' % accuracy)
     timeEnd = time.time()
-    print('run time:',timeEnd-timeStart)
+    # print('run time:',timeEnd-timeStart)
 
 # 测试网络
 random_num = random.randint(1, 1000)  # 生成随机数，用于确定测试数据的区间

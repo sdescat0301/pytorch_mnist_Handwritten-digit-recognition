@@ -13,7 +13,7 @@ import time
 # torch.manual_seed(1)    # reproducible
 
 '''超参数'''
-EPOCH = 1  # 训练整批数据多少次，为节约时间设为1，即只训练一次
+EPOCH = 3  # 训练整批数据多少次，为节约时间设为1，即只训练一次
 BATCH_SIZE = 50  # 每批次图像的多少
 LR = 0.001  # 学习率
 DOWNLOAD_MNIST = False  # 不需要下载MNIST数据集，如果需要下载则设为True
@@ -120,7 +120,7 @@ for epoch in range(EPOCH):
             test_output, last_layer = cnn(test_x)
             pred_y = torch.max(test_output, 1)[1].data.numpy()  # 将预测的数字值放入pred_y，形式为一个array
             accuracy = float((pred_y == test_y.data.numpy()).astype(int).sum()) / float(test_y.size(0))  # 计算精确度
-            print('Epoch: ', epoch, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.3f' % accuracy)
+            print('Epoch: ', epoch + 1, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.3f' % accuracy)
     timeEnd = time.time()
     # print('run time:',timeEnd-timeStart)
 
@@ -128,5 +128,5 @@ for epoch in range(EPOCH):
 random_num = random.randint(1, 1000)  # 生成随机数，用于确定测试数据的区间
 test_output, _ = cnn(test_x[random_num: random_num + 10])  # 用生成的随机数从测试数据中选出十个进行预测
 pred_y = torch.max(test_output, 1)[1].data.numpy()
-print(pred_y, 'prediction number')
+print(pred_y, "prediction number")
 print(test_y[random_num: random_num + 10].numpy(), 'real number')

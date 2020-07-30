@@ -67,7 +67,7 @@ class CNN(nn.Module):
             nn.ReLU(),  # 激活
             nn.MaxPool2d(2),  # 最大池化，输出数据的形状为 (32, 7, 7)
         )
-         # 第三个卷积层
+        # 第三个卷积层
         self.conv3 = nn.Sequential(
             nn.Conv2d(32, 64, 5, 1, 2),
             nn.ReLU()
@@ -118,9 +118,9 @@ for epoch in range(EPOCH):
             test_output, last_layer = cnn(test_x)
             pred_y = torch.max(test_output, 1)[1].data.numpy()  # 将预测的数字值放入pred_y，形式为一个array
             accuracy = float((pred_y == test_y.data.numpy()).astype(int).sum()) / float(test_y.size(0))  # 计算精确度
-            print('Epoch: ', epoch, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.3f' % accuracy)
+            print('Epoch: ', epoch + 1, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.3f' % accuracy)
     timeEnd = time.time()
-    print('run time:',timeEnd-timeStart)
+    print('run time:', timeEnd-timeStart)
 
 # 测试网络
 random_num = random.randint(1, 1000)  # 生成随机数，用于确定测试数据的区间
